@@ -17,7 +17,7 @@ Word.prototype.displayWord = function() {
     for(var i = 0; i<this.letters.length; i++) {
         display += this.letters[i].display();
     }
-    console.log('Country: ',display, "\n");
+    console.log('Food Item: ',display, "\n");
 };
 
 module.exports = foods;
