@@ -17,7 +17,7 @@ var game = {
 		console.log("It's a grocery hunt. What does your spouse want you to get from the store. Guess the letter to decipher their horrible handwriting.\n");
 		game.currentWord.displayWord();
 		game.letterInput();
-	}
+	},
 
 	"letterInput": function(){
 		inquirer.prompt(
@@ -32,31 +32,68 @@ var game = {
 					game.letterProcess(reply.letterGuess);
 				}
 			})
-		}
+	},
 
-		"letterProcess": function(userLetter){
+	"letterProcess": function(userLetter){
 			var letter = userLetter.toLowerCase();
-			var numberFound = 0;
+			var letterFound = false;
 			if (game.letters.includes(letter) && !game.currentWord.lettersGuessed.includes(letter)){
 				for (var i = 0; i < game.currentWord.letters.length; i++) {
 					if (game.currentWord.letters[i].character === letter || game.currentWord.letters[i].character === letter.toUpperCase()){
 						game.currentWord.letters[i].visible = true;
-						game.currentWord.guessed++;
-						numberFound++;
+						game.currentWord.numberRight++;
+						letterFound = true;
 					}
 				}
-				if (numberFound === 0){
+				if (!letterFound){
 					game.currentWord.guessesLeft--;
 					if(!game.currentWord.lettersGuessed.includes(letter)){
 						game.currentWord.lettersGuessed.push(letter);
 					}
-					}
+					console.log("Letters guessed: " + game.currentWord.lettersGuessed.join(' '));
+					console.log("Mmmm, probably not.\n" + game.currentWord.guessesLeft + " guesses left.\n");
 				}
-			}
+				else if (letterFound){
+						console.log("Yeah, that seems right.\n")
+						if (!game.currentWord.lettersGuessed.includes(letter)){
+							game.currentWord.lettersGuessed.push(letter);
+						}
+						console.log("Letters already tried: " + game.currentWord.lettersGuessed.join(' '));
+				}
+				else {
+						console.log("What? Somehow you've destroyed a Burmese military ship. Everything is totally screwed.");
+					}
+					game.currentWord.displayWord();
+					game.checkWin();
+				}
+				else if(game.currentWord.lettersGuessed.includes(letter)){
+					console.log("That's already been tried.\n");
+					game.letterInput();
+				}
+				else {
+					console.log("Invalid Guess. Try again\n");
+					game.letterInput()
+				}
+	},
 
-		}
+	"checkWin": function(){
+				if(game.currentWord.numberRight === game.currentWord.letters.length){
+					console.log("You've won! Congratulations! Your spouse won't think you're dumb!\n");
+					game.wins++;
+					console.log("Wins: " + game.wins);
+					game.restart();
+				}
+				else if (game.currentWord.guessesLeft === 0) {
+					console.log("You've lost and now you won't bring back the " + game.currentWord.newWord + "!\n");
+					game.restart();
+				}
+				else {
+					game.promptPlayer();
+				}
+	},
+		
 
-		"restart": function() {
+	"restart": function() {
 			inquirer.prompt(
 				[{
 					name: "replay",
