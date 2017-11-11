@@ -19,4 +19,5 @@ Word.prototype.displayWord = function() {
     }
     console.log('Country: ',display, "\n");
 };
+
 module.exports = foods;
