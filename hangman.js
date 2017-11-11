@@ -1,6 +1,6 @@
 var inquirer = require("inquirer");
 var fs = require("fs");
-var foods = require("./foods.js");
+var Foods = require("./foods.js");
 
 var game = {
 	"words": ["Broccoli","Carrots","Cauliflower","Celery","Corn","Cucumbers","Lettuce","Mushrooms","Onions","Peppers","Potatoes","Spinach","Squash","Zucchini","Tomatoes","Apples","Avocados","Bananas","Berries",
@@ -12,7 +12,7 @@ var game = {
 
 	"start": function(){
 		var newWord = game.words[Math.floor(Math.random()*game.words.length)];
-		game.currentWord = new foods(newWord);
+		game.currentWord = new Foods(newWord);
 		game.currentWord.letterFetch(game.currentWord.newWord);
 		console.log("It's a grocery hunt. What does your spouse want you to get from the store. Guess the letter to decipher their horrible handwriting.\n");
 		game.currentWord.displayWord();
@@ -88,7 +88,7 @@ var game = {
 					game.restart();
 				}
 				else {
-					game.promptPlayer();
+					game.letterInput();
 				}
 	},
 		
